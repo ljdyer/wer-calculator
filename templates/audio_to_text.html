@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/static/recorder.js"></script>
+<script src="/static/audiodisplay.js"></script>
+<script src="/static/main.js"></script>
+<script src="/static/recorderWorker.js"></script>
+
+</head>
+    <body style="background-color:rgb(127, 195, 255); text-align:center">
+    <h2>Record Audio</h2>
+    <select name="sentences" id="sentences">
+        <option value="sent1">These slides are for a phonetics class.</option>
+        <option value="sent2">Open the pod bay doors, HAL.</option>
+        <option value="sent3">She's got Thrombocytopenia.</option>
+        <option value="sent4">For shizzle, Bashira!</option>
+        <option value="sent5">Tall hamburgers fly sexily under a sultan's flamingo.</option>
+        <option value="sent5">These deals are Sofa King good!</option>
+    </select>
+    <p>
+        <button id="start" class="btn btn-success" onclick="startRecording()" disabled>Start</button>
+        <button id="stop" class="btn btn-danger" onclick="stopRecording()" disabled>Stop</button>
+    </p>
+    <p id="output">
+    </p>
+    <p>
+        <button id="get-wer" class="btn btn-success" onclick="getWER()">Get WER</button>
+    </p>
+    </p>
+    <p id="wer-output">
+    </p>
+</body>
+    
+</html>
