@@ -16,6 +16,11 @@ p{
     margin-right: auto;
 }
 
+.red-text{
+    color: darkred;
+    font-weight: bold;
+}
+
 .small-space{
     padding-top: 8px;
     padding-bottom: 8px;

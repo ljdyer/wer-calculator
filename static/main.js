@@ -39,6 +39,7 @@ function getWER(hypothesis) {
 
 function stopRecording() {
     // stop recording
+    
     audioRecorder.stop();
     document.getElementById('stop').disabled = true;
     document.getElementById('start').removeAttribute('disabled');
