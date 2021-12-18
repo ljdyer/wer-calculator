@@ -6,7 +6,7 @@ WER calculator is a Heroku Flask app that records you saying a sentence that is 
 
 Go to the [Heroku app page](https://wer-calculator.herokuapp.com/) and follow the instructions on the page.
 
-<a href="https://wer-calculator.herokuapp.com/" width="100%"><img src="readme-img/homepage.PNG"></img></a>
+<a href="https://wer-calculator.herokuapp.com/"><img src="readme-img/homepage.PNG"></img></a>
 
 ## Example output
 
