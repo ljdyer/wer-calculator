@@ -1,5 +1,5 @@
 import speech_recognition as sr
-from levenshtein import get_wer
+from levenshtein.levenshtein import get_wer
 from flask import Flask, render_template, request
 
 

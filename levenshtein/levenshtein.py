@@ -1,5 +1,5 @@
 
-from levenshtein_helper import *
+from levenshtein.levenshtein_helper import *
 from time import sleep
 import os
 
