@@ -32,7 +32,12 @@ function gotBuffers(buffers) {
 
 function doneEncoding(soundBlob) {
     fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.text().then(text => {
-        getWER(text);
+        if (text == "ERR"){
+            WERerror();
+        }
+        else{
+            getWER(text);
+        };
     }));
     recIndex++;
 }
@@ -47,6 +52,10 @@ function getWER(hypothesis) {
     fetch('/wer', {method: "POST", body: JSON.stringify(postData)}).then(response => response.text().then(text => {
         document.getElementById('wer-output').innerHTML = text;
     }));
+}
+
+function WERerror(){
+    document.getElementById('wer-output').innerHTML = "No voice was detected! Please try again."
 }
 
 function stopRecording() {

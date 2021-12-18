@@ -1,0 +1,44 @@
+body {
+    font-size: 100%;
+    font-family: Verdana, sans-serif;
+}
+
+select, button {
+    font-family: inherit;
+}
+
+div {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+hr {
+    border: 2px solid blue;
+    width: 60%;
+}
+
+table {
+    margin: auto;
+    background-color: white;
+    padding: 10px;
+}
+
+.num {
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.ref-text, .hyp-text {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.5em;
+}
+
+.ins {
+    color: green;
+    font-weight: bolder;
+}
+
+.sub {
+    color: blue;
+    font-weight: bolder;
+}

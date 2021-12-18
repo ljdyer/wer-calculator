@@ -29,8 +29,7 @@ def audio():
             # return_text = f"Google Web Speech API: '{transcription}' ({confidence*100:.2f}%)"
             return_text = transcription
         except:
-            return_text = "No voice was detected."
-        print(text)
+            return_text = "ERR"
         
     return str(return_text)
 
@@ -41,14 +40,14 @@ def wer():
         data = request.get_json(force=True)
         hypothesis = data['hypothesis']
         reference = data['reference']
-        edits, _, wer = get_wer(reference, hypothesis)
-        return_lines = [
-            f"You said: '{reference}'",
-            f"Google Web Speech API heard: '{hypothesis}'",
-            f"Number of edits required: {edits}",
-            f"Word error rate: {wer}%"
-        ]
-        return '<br>'.join(return_lines)
+        html = get_wer(reference, hypothesis)
+        # return_lines = [
+        #     f"You said: '{reference}'",
+        #     f"Google Web Speech API heard: '{hypothesis}'",
+        #     f"Number of edits required: {edits}",
+        #     f"Word error rate: {wer}%"
+        # ]
+        return html
 
 if __name__ == "__main__":
     app.run(debug=True)

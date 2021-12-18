@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/static/audio_to_text.css">
 <script src="/static/recorder.js"></script>
 <script src="/static/audiodisplay.js"></script>
 <script src="/static/main.js"></script>
@@ -9,7 +10,8 @@
 
 </head>
     <body style="background-color:rgb(127, 195, 255); text-align:center">
-    <h2>Record Audio</h2>
+    <h1>Word Error Rate (WER) Calculator</h1>
+    <p>Choose a sentence from the options below, then record yourself saying the sentence you chose using the Start and Stop buttons.</p>
     <select name="sentences" id="sentences">
         <option value="sent1">These slides are for a phonetics class.</option>
         <option value="sent2">Open the pod bay doors, HAL.</option>
@@ -21,12 +23,6 @@
     <p>
         <button id="start" class="btn btn-success" onclick="startRecording()" disabled>Start</button>
         <button id="stop" class="btn btn-danger" onclick="stopRecording()" disabled>Stop</button>
-    </p>
-    <p id="output">
-    </p>
-    <p>
-        <button id="get-wer" class="btn btn-success" onclick="getWER()">Get WER</button>
-    </p>
     </p>
     <p id="wer-output">
     </p>
