@@ -55,19 +55,19 @@ def get_steps_and_sents(words_hyp, steps):
         latest_sentence = remove_html_from_all(latest_sentence)
 
         if s[0] == "SUB":
-            step = f"SUB: '{s[1]}' ⭢  '{s[2]}'"
+            step = f"substitute: '{s[1]}' ⭢  '{s[2]}'"
             latest_sentence[i] = add_class(s[2], 'sub')
             sentence = ' '.join(latest_sentence)
             steps_and_sents.append((step, sentence))
 
         if s[0] == "INS":
-            step = f"INS: '{s[1]}'"
+            step = f"insert: '{s[1]}'"
             latest_sentence.insert(i, add_class(s[1], 'ins'))
             sentence = ' '.join(latest_sentence)
             steps_and_sents.append((step, sentence))
 
         if s[0] == "DEL":
-            step = f"DEL: '{s[1]}'"
+            step = f"delete: '{s[1]}'"
             latest_sentence.remove(s[1])
             sentence = ' '.join(latest_sentence)
             steps_and_sents.append((step, sentence))
@@ -133,7 +133,13 @@ def get_wer(reference: str, hypothesis: str) -> tuple:
 
     steps = get_edit_steps(words_ref, words_hyp, backpointer_matrix)
     steps_and_sents = get_steps_and_sents(words_hyp, steps)
-    steps_table = make_html_table(steps_and_sents)
+    steps_table = make_steps_and_sents_table(steps_and_sents)
+    html_steps = f"""
+    <div class="extra-space">
+        {HERE_ARE_THE_EDITS}<br><br>
+        {steps_table}
+    </div>
+    """
 
     # === Generate the final HTML to display to the user ===
 
@@ -143,17 +149,10 @@ def get_wer(reference: str, hypothesis: str) -> tuple:
     html_summary = generate_html_summary(reference, hypothesis, edits, wer)
 
     html_parts = [html_summary]
-    
     if edits:
-        html_parts.extend([
-            "<div>",
-            HERE_ARE_THE_EDITS + "<br><br>",
-            steps_table,
-            "</div>"
-        ])
-
+        html_parts.append(html_steps)
     html = '\n'.join(html_parts)
-
+    
     return html
 
 

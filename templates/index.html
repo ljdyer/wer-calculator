@@ -2,13 +2,14 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
     <body style="background-color:rgb(127, 195, 255);">
-
-            <div class="flex justify-center">
-                <form action="/audio_to_text/"><button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Testing Here</button></form>
-            </div>
-
+        <h1>Word Error Rate (WER) Calculator</h1>
+        <p>Created by <a target="_blank"href="https://github.com/ljdyer">Laurence Dyer</a> as part of a University assignment on automatic speech recognition in December 2021.</p>
+        <p>Click the Begin button and then follow the instructions on the next page to record yourself saying a reference sentence and find out how close Google Web Speech API is to understanding you!</p>
+        <form action="/audio_to_text/"><button>Start Recording</button></form>
+        <p>Example sentences come from Will Styler's article <a target="_blank" href="https://wstyler.ucsd.edu/posts/terrible_speech_recognition.html">Doing Terrible things to Speech Recognition Software</a>.</p>
     </body>
 
 </html>

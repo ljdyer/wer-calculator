@@ -22,8 +22,8 @@ def audio():
   
     with sr.AudioFile('upload/audio.wav') as source:
         audio_data = r.record(source)
-        text = r.recognize_google(audio_data, language='en-GB', show_all=True)
         try:
+            text = r.recognize_google(audio_data, language='en-GB', show_all=True)
             transcription = text['alternative'][0]['transcript']
             # confidence = text['alternative'][0]['confidence']
             # return_text = f"Google Web Speech API: '{transcription}' ({confidence*100:.2f}%)"

@@ -1,7 +1,7 @@
 
 import re
 HTML_TAG = re.compile('<.*?>')
-HERE_ARE_THE_EDITS = "Here are the edits required to get " + \
+HERE_ARE_THE_EDITS = "Here is an example sequence of edits to get " + \
     "from the reference sentence to the hypothesis sentence:"
 
 # ====================
@@ -16,6 +16,13 @@ def cell_align_right(str_: str) -> str:
     """Put string into an HTML table cell with right alignment"""
 
     return f'<td style="text-align:right">{str_}</td>'
+
+
+# ====================
+def bold(str_: str) -> str:
+    """Make a string bold"""
+
+    return f'<b>{str_}</b>'
 
 
 # ====================
@@ -110,15 +117,13 @@ def remove_html_from_all(strs: list) -> list:
 
 
 # ====================
-def make_html_table(table: list) -> str:
-    """Make an HTML table from a list of lists"""
-
-
+def make_steps_and_sents_table(steps_and_sents: list) -> str:
+    """Make an HTML table from a list of tuples of steps and sentences"""
 
     html_lines = ["<table>"]
-    for step, sent in table:
+    for step, sent in steps_and_sents:
         html_lines.append(
-            f'<tr>{cell_align_right(step)}<td></td></tr>')
+            f'<tr>{cell_align_right(bold(step))}<td></td></tr>')
         html_lines.append(
             f'<tr><td></td>{cell_align_left(sent)}</tr>')
     html_lines.append("</table>")
@@ -129,23 +134,23 @@ def make_html_table(table: list) -> str:
 # ====================
 def generate_html_summary(reference, hypothesis, edits, wer):
 
-    html_lines = [
-        "============================================",
-        "<div>",
-        "You said:<br><br>",
-        f'<span class="ref-text">"{reference}"</span>',
-        "</div>",
-        "<div>",
-        "Google Web Speech API heard:<br><br>",
-        f'<span class="hyp-text">"{hypothesis}"</span>',
-        "</div>",
-        "<div>",
-        f'<span class="num">{edits}</span> {sing_or_plural("edit", edits)} {is_or_are(edits)} ' + \
-            'required to get from the hypothesis sentence to the reference sentence.',
-        "</div>",
-        "<div>",
-        f'The word error rate (WER) is <span class="num">{wer}%</span>.'
-        "</div>",
-    ]
-    return '\n'.join(html_lines)
-    
+    html = f"""
+    <div class="extra-space">
+        You said:<br>
+        <p class="ref-text">"{reference}"</p>
+    </div>
+    <div class="extra-space">
+        Google Web Speech API heard:<br>
+        <p class="hyp-text">"{hypothesis}"</p>
+    </div>
+    <div class="extra-space">
+        <span class="num">{edits}</span> 
+         {sing_or_plural("edit", edits)} {is_or_are(edits)}
+        required to get from the hypothesis sentence to the reference sentence.
+    </div>
+    <div class="extra-space">
+        The word error rate (WER) is <span class="num">{wer}%</span>.
+    </div>
+    """
+
+    return html    

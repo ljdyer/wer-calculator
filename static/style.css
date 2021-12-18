@@ -1,13 +1,27 @@
 body {
     font-size: 100%;
     font-family: Verdana, sans-serif;
+    background-color: rgb(127, 195, 255);
+    text-align: center
 }
 
-select, button {
+select, button, option {
     font-family: inherit;
+    font-size: inherit;
 }
 
-div {
+p{
+    max-width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.small-space{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.extra-space {
     padding-top: 15px;
     padding-bottom: 15px;
 }
@@ -31,6 +45,8 @@ table {
 .ref-text, .hyp-text {
     font-family: 'Times New Roman', serif;
     font-size: 1.5em;
+    margin-top:10px;
+    margin-bottom:0px;
 }
 
 .ins {
