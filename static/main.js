@@ -22,12 +22,14 @@ function doneEncoding(soundBlob) {
 }
 
 function WERerror(){
-    document.getElementById('wer-output').innerHTML = "No voice was detected! Please try again."
+    document.getElementById('wer-output').innerHTML = '<div class="extra-space">No voice was detected! Please try again.</div>';
 }
 
 function getWER(hypothesis) {
+    // Get reference sentence from page
     var e = document.getElementById("sentences");
     var my_sentence = e.options[e.selectedIndex].text;
+    // Post reference and hypothesis to Flask API
     let postData = {
         reference: my_sentence,
         hypothesis: hypothesis
@@ -38,21 +40,24 @@ function getWER(hypothesis) {
 }
 
 function stopRecording() {
-    // stop recording
-    
+    // Stop recording
     audioRecorder.stop();
+    // Toggle buttons
     document.getElementById('stop').disabled = true;
     document.getElementById('start').removeAttribute('disabled');
+    // Store recorded audio
     audioRecorder.getBuffers(gotBuffers);
 }
 
 function startRecording() {
-
-    // start recording
     if (!audioRecorder)
         return;
+    // Toggle buttons
     document.getElementById('start').disabled = true;
     document.getElementById('stop').removeAttribute('disabled');
+    // Clear WER info
+    document.getElementById('wer-output').innerHTML = '';
+    // Start recording
     audioRecorder.clear();
     audioRecorder.record();
 }
