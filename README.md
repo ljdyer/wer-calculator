@@ -11,7 +11,7 @@ Go to the [Heroku app page](https://wer-calculator.herokuapp.com/) and follow th
 ## Example output
 
 <a href="https://wer-calculator.herokuapp.com/"><img src="readme-img/detected.PNG"></img></a>
-<a href="https://wer-calculator.herokuapp.com/"><img src="readme-img/levenshtein.PNG"></img></a>
+<a href="https://wer-calculator.herokuapp.com/"><img src="readme-img/levenshtein.png"></img></a>
 
 ## How it works
 
