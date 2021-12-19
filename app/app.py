@@ -1,6 +1,6 @@
 import speech_recognition as sr
 from levenshtein.levenshtein import get_wer
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 
 app = Flask(__name__)
@@ -47,7 +47,7 @@ def wer():
         #     f"Number of edits required: {edits}",
         #     f"Word error rate: {wer}%"
         # ]
-        return html
+        return jsonify(html)
 
 if __name__ == "__main__":
     app.run(debug=True)

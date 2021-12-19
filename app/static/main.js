@@ -35,7 +35,11 @@ function getWER(hypothesis) {
         hypothesis: hypothesis
     };
     fetch('/wer', {method: "POST", body: JSON.stringify(postData)}).then(response => response.text().then(text => {
-        document.getElementById('wer-output').innerHTML = text;
+        // Parse JSON response
+        werOutput = JSON.parse(text).html
+        document.getElementById('wer-output').innerHTML = werOutput;
+        levenshteinMatrix = JSON.parse(text).levenshtein
+        document.getElementById('levenshtein-matrix').innerHTML = levenshteinMatrix;
     }));
 }
 
@@ -110,3 +114,4 @@ function initAudio() {
 }
 
 window.addEventListener('load', initAudio);
+

@@ -1,8 +1,15 @@
 
 import re
+
+# === Regular expressions ====
 HTML_TAG = re.compile('<.*?>')
+
+# === UI text ===
 HERE_ARE_THE_EDITS = "Here is an example sequence of edits to get " + \
     "from the reference sentence to the hypothesis sentence:"
+
+
+# === HTML FORMATTING (GENERAL) ===
 
 # ====================
 def cell_align_left(str_: str) -> str:
@@ -26,77 +33,8 @@ def bold(str_: str) -> str:
 
 
 # ====================
-def sing_or_plural(word: str, number: int) -> str:
-    """Add a plural s to the word if the number is not 1"""
-
-    if number == 1:
-        return word
-    else:
-        return word + 's'
-
-
-# ====================
-def is_or_are(number: int) -> str:
-    """Return 'is' if the number is 1 or 'are' otherwise"""
-
-    if number == 1:
-        return 'is'
-    else:
-        return 'are'
-
-
-# ====================
-def create_matrix(m,n):
-    """Create an m by n matrix"""
-
-    return [[0 for _ in range(m)] for _ in range(n)]
-
-
-# ====================
-def clean_sent(sent: str) -> str:
-    """Remove punctuation, etc. and convert to lowercase"""
-
-    lower_letters = [c.lower()
-                     for c in sent
-                     if c.isalnum() or c == ' ']
-    return ''.join(lower_letters)
-
-
-# ====================
-def max_len(l: list) -> int:
-    """Get the maximum of the lengths of elements in a list"""
-
-    return max([len(x) for x in l])
-
-
-# ====================
-def print_levenshtein_matrix(matrix: list, row_header: list,
-                             col_header: list):
-    """Print a Levenshtein matrix with row and column headers"""
-
-    row_header = ['', ''] + row_header
-
-    just_amt = max(max_len(row_header), max_len(col_header)) + 1
-
-    # os.system('cls')
-    for col in row_header:
-        print(f'{col.ljust(just_amt)}', end='')
-    print()
-    print()
-    for i in range(len(matrix)):
-        if i > 0:
-            print(f'{col_header[i-1].ljust(just_amt)}', end='')
-        else:
-            print(f'{"".ljust(just_amt)}', end='')
-        for col in matrix[i]:
-            print(f'{str(col).ljust(just_amt)}', end='')
-        print()
-        print()
-
-
-# ====================
 def add_class(word: str, class_: str) -> str:
-    """Add an HTML class to a word"""
+    """Add an HTML class to a string"""
 
     return f'<span class="{class_}">' + word + '</span>'
 
@@ -115,6 +53,88 @@ def remove_html_from_all(strs: list) -> list:
 
     return [remove_html(str_) for str_ in strs]
 
+
+# === STRINGS & GRAMMAR ===
+
+# ====================
+def sing_or_plural(word: str, number: int) -> str:
+    """Add a plural s to the word if the number is not 1"""
+
+    if number == 1:
+        return word
+    else:
+        return word + 's'
+
+
+# ====================
+def is_or_are(number: int) -> str:
+    """Return 'is' if the number is 1 or 'are' otherwise"""
+
+    if number == 1:
+        return 'is'
+    else:
+        return 'are'
+
+# ====================
+def clean_sent(sent: str) -> str:
+    """Remove punctuation, etc. and convert to lowercase"""
+
+    lower_letters = [c.lower()
+                     for c in sent
+                     if c.isalnum() or c == ' ']
+    return ''.join(lower_letters)
+
+
+# === LISTS AND MATRICES ===
+
+# ====================
+def max_len(l: list) -> int:
+    """Get the maximum of the lengths of elements in a list"""
+
+    return max([len(x) for x in l])
+
+# ====================
+def create_matrix(m,n):
+    """Create an m by n matrix"""
+
+    return [[0 for _ in range(m)] for _ in range(n)]
+
+
+# === APPLICATION-SPECIFIC
+
+# ====================
+def print_levenshtein_matrix(matrix: list, backpointer_matrix: list,
+                             words_ref: list, words_hyp: list):
+    """Print a Levenshtein matrix with row and column headers"""
+
+    new_matrix = create_matrix(len(matrix[0]), len(matrix))
+
+    # Justify to the length of the longest word in either reference or
+    # hypothesis
+    just_amt = max(max_len(words_ref), max_len(words_ref)) + 1
+
+    # Add blank cells
+    words_ref = [''] + words_ref    # Header row
+    words_hyp = ['', ''] + words_hyp    # Header column
+    
+    # Combine numbers and backpointers
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if backpointer_matrix[i][j]:
+                new_matrix[i][j] = str(matrix[i][j]) + ' ' + \
+                            str(backpointer_matrix[i][j])
+    # Append header row
+    new_matrix = [words_ref] + new_matrix
+    # Append header column
+    new_matrix = [[words_hyp[i]] + new_matrix[i]
+               for i in range(len(new_matrix))]
+
+    # Print
+    for row in new_matrix:
+        for cell in row:
+            print(str(cell).ljust(just_amt), end='')
+        print()
+    
 
 # ====================
 def make_steps_and_sents_table(steps_and_sents: list) -> str:
@@ -146,7 +166,7 @@ def generate_html_summary(reference, hypothesis, edits, wer):
     <div class="extra-space">
         <span class="num">{edits}</span> 
          {sing_or_plural("edit", edits)} {is_or_are(edits)}
-        required to get from the hypothesis sentence to the reference sentence.
+        required to get from the hypothesis sentence to the reference sentence (<a href="#" onclick="showLevenshtein();return false;">show Levenshtein matrix</a>).
     </div>
     <div class="extra-space">
         The word error rate (WER) is <span class="num">{wer}%</span>.
@@ -154,3 +174,37 @@ def generate_html_summary(reference, hypothesis, edits, wer):
     """
 
     return html    
+
+
+# ====================
+def generate_levenshtein_html(matrix: list, backpointer_matrix: list,
+                             words_ref: list, words_hyp: list):
+    """Generate an HTML string to display a Levenshtein matrix with
+    backpointer symbols"""
+
+    new_matrix = create_matrix(len(matrix[0]), len(matrix))
+    just_amt = max(max_len(words_ref), max_len(words_ref)) + 1
+    words_ref = [''] + words_ref    # Header row
+    words_hyp = ['', ''] + words_hyp    # Header column
+    
+    # Combine numbers and backpointers
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if backpointer_matrix[i][j]:
+                new_matrix[i][j] = str(matrix[i][j]) + ' ' + \
+                            str(backpointer_matrix[i][j])
+    # Append header row
+    new_matrix = [words_ref] + new_matrix
+    # Append header column
+    new_matrix = [[words_hyp[i]] + new_matrix[i]
+               for i in range(len(new_matrix))]
+
+    html_lines = ['<table class="levenshtein"']
+    for row in new_matrix:
+        html_lines.append("<tr>")
+        for cell in row:
+            html_lines.append(f'<td>{cell}</td>')
+        html_lines.append("</tr>")
+    html_lines.append("</table>")
+
+    return '\n'.join(html_lines)

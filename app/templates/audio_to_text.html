@@ -3,8 +3,8 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/static/style.css">
-<script src="/static/recorder.js"></script>
 <script src="/static/main.js"></script>
+<script src="/static/recorder.js"></script>
 <script src="/static/recorderWorker.js"></script>
 
 </head>
@@ -28,6 +28,34 @@
     </div>
     <hr>
     <div id="wer-output"></div>
+
+    <div id="levenshtein" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <br><br>
+            <div>
+                This is the Levenshtein matrix with backpointers used to calculate the minimum edits required and generate the sequence of edits.
+            </div>
+            <br>
+            <div id="levenshtein-matrix"></div>
+            <br>
+            <div>
+            
+                <b>Key:</b>
+                <table class='matrix-key'>
+                    <tr>
+                        <td>★ Keep</td>
+                        <td>⭦ Substitute</td>
+                        <td>⭠ Insert</td>
+                        <td>⭡ Delete</td>
+                    </tr>
+                    </td></tr>
+                </table>
+            </div>
+            <br><br>
+        </div>
+    </div>
 </body>
-    
+
+<script src="/static/levenshteinModal.js"></script>
 </html>

@@ -129,6 +129,7 @@ def get_wer(reference: str, hypothesis: str) -> tuple:
                 matrix[n_][m_] = min_ + 1
                 backpointer_matrix[n_][m_] = backpointer
 
+
     # === Get the edit steps and generate an HTML table to illustrate them ===
 
     steps = get_edit_steps(words_ref, words_hyp, backpointer_matrix)
@@ -153,7 +154,9 @@ def get_wer(reference: str, hypothesis: str) -> tuple:
         html_parts.append(html_steps)
     html = '\n'.join(html_parts)
     
-    return html
+    levenshtein_html = generate_levenshtein_html(matrix, backpointer_matrix, words_ref, words_hyp)
+
+    return {'html': html, 'levenshtein': levenshtein_html}
 
 
 # ====================
