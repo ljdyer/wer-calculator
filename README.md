@@ -14,7 +14,7 @@ Go to the [Heroku app page](https://wer-calculator.herokuapp.com/) and follow th
 
 ## How it works
 
-I implemented the [Levenshtein algorithm and generation of a sequence of edit steps](levenshtein/levenshtein.py) from scratch in Python based on the description in Juraskfy and Martin (2008, pp. 74-77).
+I implemented the [Levenshtein algorithm and generation of a sequence of edit steps](app/levenshtein/levenshtein.py) from scratch in Python based on the description in Juraskfy and Martin (2008, pp. 74-77).
 
 The reference sentence and audio data are sent via a POST request to the Flask app, which sends back information about the Word Error Rate as an HTML string.
 
