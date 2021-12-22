@@ -148,11 +148,13 @@ def make_steps_and_sents_table(steps_and_sents: list) -> str:
             f'<tr><td></td>{cell_align_left(sent)}</tr>')
     html_lines.append("</table>")
 
-    return '\n'.join(html_lines)
+    steps_table = '\n'.join(html_lines)
+
+    return steps_table
 
 
 # ====================
-def generate_html_summary(reference, hypothesis, edits, wer):
+def generate_html_summary(reference, hypothesis, edits, wer, steps_table):
 
     html = f"""
     <div class="extra-space">
@@ -172,6 +174,13 @@ def generate_html_summary(reference, hypothesis, edits, wer):
         The word error rate (WER) is <span class="num">{wer}%</span>.
     </div>
     """
+    if edits:
+        html = html + f"""
+        <div class="extra-space">
+            {HERE_ARE_THE_EDITS}<br><br>
+            {steps_table}
+        </div>
+        """
 
     return html    
 

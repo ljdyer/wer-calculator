@@ -80,9 +80,13 @@ def get_wer(reference: str, hypothesis: str) -> tuple:
     """Get number of errors and word error rate between reference and
     hypothesis transcriptions.
 
-    Return a tuple: (edits, len_hyp, wer) edits: number of edits required
-    len_ref: length of the reference sentence in words wer: word error rate as
-    a percentage"""
+    Return a dictionary with two elements:
+
+    'html': The HTML for the main part of the page that includes
+            information about WER and edit sequence
+    'levenshtein': The HTML for the modal popup that shows the
+                   Levenshtein matrix
+    """
 
     # === Get words from reference and hypothesis sentences ===
 
@@ -129,32 +133,23 @@ def get_wer(reference: str, hypothesis: str) -> tuple:
                 matrix[n_][m_] = min_ + 1
                 backpointer_matrix[n_][m_] = backpointer
 
+    # === Get minimum edit distance and 
+
+    edits = matrix[n-1][m-1]
+    wer = f'{edits/len(words_ref)*100:.1f}'
 
     # === Get the edit steps and generate an HTML table to illustrate them ===
 
     steps = get_edit_steps(words_ref, words_hyp, backpointer_matrix)
     steps_and_sents = get_steps_and_sents(words_hyp, steps)
     steps_table = make_steps_and_sents_table(steps_and_sents)
-    html_steps = f"""
-    <div class="extra-space">
-        {HERE_ARE_THE_EDITS}<br><br>
-        {steps_table}
-    </div>
-    """
-
+    
     # === Generate the final HTML to display to the user ===
 
-    edits = matrix[n-1][m-1]
-    wer = f'{edits/len(words_ref)*100:.1f}'
-
-    html_summary = generate_html_summary(reference, hypothesis, edits, wer)
-
-    html_parts = [html_summary]
-    if edits:
-        html_parts.append(html_steps)
-    html = '\n'.join(html_parts)
-    
-    levenshtein_html = generate_levenshtein_html(matrix, backpointer_matrix, words_ref, words_hyp)
+    html = generate_html_summary(reference, hypothesis,
+                                 edits, wer, steps_table)
+    levenshtein_html = generate_levenshtein_html(
+        matrix,backpointer_matrix, words_ref, words_hyp)
 
     return {'html': html, 'levenshtein': levenshtein_html}
 
