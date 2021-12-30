@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 
 # Project modules
 from levenshtein.levenshtein import get_levenshtein_html
+from levenshtein.test_levenshtein import test_get_wer_info
 from app_helper import *
 
 # Error messages
@@ -64,4 +65,5 @@ def get_wer():
 
 # ====================
 if __name__ == "__main__":
+    test_get_wer_info()
     app.run(debug=True)
