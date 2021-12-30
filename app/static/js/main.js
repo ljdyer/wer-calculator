@@ -11,44 +11,60 @@ function gotBuffers(buffers) {
 }
 
 function doneEncoding(soundBlob) {
-    fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.text().then(text => {
+    
+    fetch('/save_audio', {method: "POST", body: soundBlob}).then(response => response.text().then(text => {
         if (text == "ERR"){
-            WERerror();
+            displayError('Unable to save your recording! Please try again.');
         }
         else{
-            getWER(text);
+            displayText('Calculating WER. Please wait a moment...');
+            // Get reference sentence from page
+            var e = document.getElementById("sentences");
+            var reference_sentence = e.options[e.selectedIndex].text;
+            let postData = {
+                reference: reference_sentence,
+            };
+
+            // Post reference sentence to Flask API and get HTML content back
+            fetch('/get_wer', { method: "POST", body: JSON.stringify(postData) }).then(response => response.text().then(text => {
+
+                // Parse JSON response
+                response = JSON.parse(text)
+                if ('error' in response){
+                    displayError(response.error)
+                }
+                else{
+                    displayWerInfo(response.html, response.levenshtein)
+                }
+            }));
         };
     }));
 }
 
-function WERerror(){
-    document.getElementById('wer-output').innerHTML = '<div class="extra-space">No voice was detected! Please try again.</div>';
+function displayWerInfo(werOutput, levenshteinMatrix){
+    document.getElementById('wer-output').classList.remove("red-text");
+    document.getElementById('wer-output').innerHTML = werOutput;
+    document.getElementById('levenshtein-matrix').innerHTML = levenshteinMatrix;
 }
 
-function getWER(hypothesis) {
-    // Get reference sentence from page
-    var e = document.getElementById("sentences");
-    var my_sentence = e.options[e.selectedIndex].text;
-    // Post reference and hypothesis to Flask API
-    let postData = {
-        reference: my_sentence,
-        hypothesis: hypothesis
-    };
-    fetch('/wer', {method: "POST", body: JSON.stringify(postData)}).then(response => response.text().then(text => {
-        // Parse JSON response
-        werOutput = JSON.parse(text).html
-        document.getElementById('wer-output').innerHTML = werOutput;
-        levenshteinMatrix = JSON.parse(text).levenshtein
-        document.getElementById('levenshtein-matrix').innerHTML = levenshteinMatrix;
-    }));
+function displayError(error){
+    document.getElementById('wer-output').classList.add("red-text");
+    document.getElementById('wer-output').innerHTML = `<div class="extra-space">${error}</div>`;
+}
+
+function displayText(message){
+    document.getElementById('wer-output').classList.remove("red-text");
+    document.getElementById('wer-output').innerHTML = `<div class="extra-space">${message}</div>`;
 }
 
 function stopRecording() {
     // Stop recording
     audioRecorder.stop();
+
     // Toggle buttons
     document.getElementById('stop').disabled = true;
     document.getElementById('start').removeAttribute('disabled');
+
     // Store recorded audio
     audioRecorder.getBuffers(gotBuffers);
 }
@@ -56,15 +72,19 @@ function stopRecording() {
 function startRecording() {
     if (!audioRecorder)
         return;
+
     // Toggle buttons
     document.getElementById('start').disabled = true;
     document.getElementById('stop').removeAttribute('disabled');
+
     // Clear WER info
     document.getElementById('wer-output').innerHTML = '';
+
     // Start recording
     audioRecorder.clear();
     audioRecorder.record();
 }
+
 
 function gotStream(stream) {
     document.getElementById('start').removeAttribute('disabled');
@@ -87,6 +107,7 @@ function gotStream(stream) {
     inputPoint.connect(zeroGain);
     zeroGain.connect(audioContext.destination);
 }
+
 
 function initAudio() {
     if (!navigator.getUserMedia)

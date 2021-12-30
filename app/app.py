@@ -1,52 +1,67 @@
-import speech_recognition as sr
-from levenshtein.levenshtein import get_wer
+# Third-party libraries
 from flask import Flask, render_template, request, jsonify
+
+# Project modules
+from levenshtein.levenshtein import get_levenshtein_html
+from app_helper import *
+
+# Error messages
+RETRIEVE_REF_ERROR = 'Could not retrieve reference sentence. Please try again'
+SR_ERROR = 'No speech detected. Please try again'
+LEVENSHTEIN_ERROR = 'An error occurred while calculating the WER. Please try again'
 
 
 app = Flask(__name__)
 
+# ====================
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/audio_to_text/')
-def audio_to_text():
-    return render_template('audio_to_text.html')
 
-@app.route('/audio', methods=['POST'])
-def audio():
-    r = sr.Recognizer()
-    with open('upload/audio.wav', 'wb') as f:
-        f.write(request.data)
+# ====================
+@app.route('/main/')
+def main():
+    return render_template('main.html')
+
+
+# ====================
+@app.route('/save_audio', methods=['POST'])
+def save_audio():
+    # Attempt to save sound blob sent from frontend
+    try:
+        sound_blob = request.data
+        with open('upload/audio.wav', 'wb') as f:
+            f.write(sound_blob)
+        return "SUCCESS"
+    except:
+        return "ERR"
   
-    with sr.AudioFile('upload/audio.wav') as source:
-        audio_data = r.record(source)
-        try:
-            text = r.recognize_google(audio_data, language='en-GB', show_all=True)
-            transcription = text['alternative'][0]['transcript']
-            # confidence = text['alternative'][0]['confidence']
-            # return_text = f"Google Web Speech API: '{transcription}' ({confidence*100:.2f}%)"
-            return_text = transcription
-        except:
-            return_text = "ERR"
-        
-    return str(return_text)
-
-@app.route('/wer', methods=['POST'])
-def wer():
-    if request.method == "POST":
-
+    
+# ====================
+@app.route('/get_wer', methods=['POST'])
+def get_wer():
+    # Get reference sentence sent from frontend
+    try:
         data = request.get_json(force=True)
-        hypothesis = data['hypothesis']
         reference = data['reference']
-        html = get_wer(reference, hypothesis)
-        # return_lines = [
-        #     f"You said: '{reference}'",
-        #     f"Google Web Speech API heard: '{hypothesis}'",
-        #     f"Number of edits required: {edits}",
-        #     f"Word error rate: {wer}%"
-        # ]
-        return jsonify(html)
+    except:
+        return {'error': RETRIEVE_REF_ERROR}
 
+    # Get hypothesis sentence from Google Web Speech API
+    try:
+        hypothesis = get_best_hypothesis('upload/audio.wav')
+    except:
+        return {'error': SR_ERROR}
+        
+    # Get WER information to display to user
+    try:
+        html = get_levenshtein_html(reference, hypothesis)
+    except:
+        return {'error': LEVENSHTEIN_ERROR}
+    return jsonify(html)
+    
+
+# ====================
 if __name__ == "__main__":
     app.run(debug=True)
