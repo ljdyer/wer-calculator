@@ -22,7 +22,7 @@ The reference sentence and audio data are sent via a POST request to the Flask a
 ## Credits
 
 - The Python [SpeechRecognition](https://pypi.org/project/SpeechRecognition/) library is used to interface with the Google Web Speech API.
-- Matt Diamond's [Recorderjs](https://github.com/mattdiamond/Recorderjs) plugin is used to record and export audio.
+- Matt Diamond's [Recorder.js](https://github.com/mattdiamond/Recorderjs) plugin is used to record and export audio.
 - Example sentences come from Will Styler's article [Doing Terrible things to Speech Recognition Software](https://wstyler.ucsd.edu/posts/terrible_speech_recognition.html).
 
 ## References
