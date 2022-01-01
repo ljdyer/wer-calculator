@@ -72,6 +72,9 @@ function stopRecording() {
 function startRecording() {
     if (!audioRecorder)
         return;
+    // Need to resume audioContext in case this is the first user gesture since landing on the page
+    // https://stackoverflow.com/questions/55026293/google-chrome-javascript-issue-in-getting-user-audio-the-audiocontext-was-not
+    audioContext.resume();
 
     // Toggle buttons
     document.getElementById('start').disabled = true;

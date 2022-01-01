@@ -7,9 +7,9 @@ from levenshtein.test_levenshtein import test_get_wer_info
 from app_helper import *
 
 # Error messages
-RETRIEVE_REF_ERROR = 'Could not retrieve reference sentence. Please try again'
-SR_ERROR = 'No speech detected. Please try again'
-LEVENSHTEIN_ERROR = 'An error occurred while calculating the WER. Please try again'
+RETRIEVE_REF_ERROR = 'Could not retrieve reference sentence. Please try again.'
+SR_ERROR = 'No speech detected. Please try again.'
+LEVENSHTEIN_ERROR = 'An error occurred while calculating the WER. Please try again.'
 
 
 app = Flask(__name__)

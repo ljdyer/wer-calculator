@@ -20,7 +20,7 @@ def clean_sentence(sent: str) -> str:
 
 # ====================
 def get_wer_info(words_ref: list, words_hyp: list) -> dict:
-    """Get lists of words in the reference and hypothesis transcriptions,
+    """Given lists of words in the reference and hypothesis transcriptions,
     calculate the minimum edit distance and word error rate between
     them using the Levenshtein algorithm.
 
@@ -31,7 +31,7 @@ def get_wer_info(words_ref: list, words_hyp: list) -> dict:
            place
     'matrix': The levenshtein matrix with scores used to calculate
               minimum edits
-    'backpointer_matrix': The matrix with backopinters used to find a
+    'backpointer_matrix': The matrix with backpointers used to find a
                           possible series of edits
     """
 

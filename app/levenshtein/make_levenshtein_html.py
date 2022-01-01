@@ -7,7 +7,7 @@ HTML_TAG = re.compile('<.*?>')
 # === UI text ===
 
 HERE_ARE_THE_EDITS = "Here is an example sequence of edits to get " + \
-    "from the reference sentence to the hypothesis sentence:"
+    "from the hypothesis sentence to the reference sentence:"
 LEVENSHTEIN_LINK = \
     '<a href="#" onclick="showLevenshtein();return false;">' + \
     'show Levenshtein matrix</a>'

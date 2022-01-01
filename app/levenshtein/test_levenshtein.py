@@ -15,7 +15,8 @@ TEST_CASES = [
     },
     {
         'reference': 'These slides are for a phonetics class.',
-        'hypothesis': 'this is a sentence that has absolutely nothing to do with the reference sentence',
+        'hypothesis': 'this is a sentence that has absolutely ' + \
+                      'nothing to do with the reference sentence',
         'wer': 200
     },
     # If hypothesis is empty, WER is 100%
@@ -37,8 +38,8 @@ ERROR_CASE = {
 def test_get_wer_info():
     """Run test cases for get_wer_info function"""
 
-    # Print a warning and exit if get_wer_info returns a different
-    # WER to the expected WER for any of the test cases
+    # Print a warning and exit if get_wer_info returns a different WER to the
+    # expected WER for any of the test cases
     for tc in TEST_CASES:
         words_ref = clean_sentence(tc['reference']).split()
         words_hyp = clean_sentence(tc['hypothesis']).split()
@@ -46,14 +47,13 @@ def test_get_wer_info():
         try:
             assert wer_info['wer'] == tc['wer']
         except:
-            print(wer_info['wer'])
             print('!!! WARNING !!!: test_get_wer_info failed for',
                   f'reference: {tc["reference"]};',
                   f'hypothesis: {tc["hypothesis"]}.')
             quit()
 
-    # Print a warning and exit if get_wer_info does not raise
-    # an exception when the hypothesis sentence is empty
+    # Print a warning and exit if get_wer_info does not raise an exception
+    # when the hypothesis sentence is empty
     words_ref = clean_sentence(ERROR_CASE['reference']).split()
     words_hyp = clean_sentence(ERROR_CASE['hypothesis']).split()
     try:
@@ -64,6 +64,5 @@ def test_get_wer_info():
     except:
         pass
 
-    # If we made it to the end without quitting, all tests were
-    # passed
+    # If we made it to the end without quitting, all tests were passed
     print('*** test_get_wer_info: All tests passed. ***')
