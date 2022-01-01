@@ -113,28 +113,55 @@ function gotStream(stream) {
 
 
 function initAudio() {
-    if (!navigator.getUserMedia)
-        navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    if (!navigator.cancelAnimationFrame)
-        navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-    if (!navigator.requestAnimationFrame)
-        navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-
-    navigator.getUserMedia(
-        {
-            "audio": {
-                "mandatory": {
-                    "googEchoCancellation": "false",
-                    "googAutoGainControl": "false",
-                    "googNoiseSuppression": "false",
-                    "googHighpassFilter": "false"
+    if (navigator.getUserMedia){
+        console.log("navigator.getUserMedia")
+        navigator.getUserMedia(
+            {
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
                 },
-                "optional": []
-            },
-        }, gotStream, function (e) {
-            alert('Error getting audio');
-            console.log(e);
-        });
+            }, gotStream, function (e) {
+                alert('Error getting audio');
+                console.log(e);
+            });
+    } else if (navigator.webkitGetUserMedia){
+        console.log("navigator.webkitGetUserMedia")
+        navigator.webkitGetUserMedia(
+            {
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
+                },
+            }, gotStream, function (e) {
+                alert('Error getting audio');
+                console.log(e);
+            });
+    } else if (navigator.mediaDevices.getUserMedia){
+        console.log("navigator.mediaDevices.getUserMedia")
+        navigator.mediaDevices.getUserMedia({audio: true})
+            .then(function (stream) {
+                alert('Success!');
+
+                gotStream(stream)
+            })
+            .catch(function (err) {
+                alert('Error getting audio');
+                console.log(err);
+            });
+    } else{
+        alert('Error getting audio');
+    }
 }
 
 window.addEventListener('load', initAudio);
