@@ -16,6 +16,11 @@ p {
     margin-right: auto;
 }
 
+.blue-text{
+    color: darkblue;
+    font-weight: bold;
+}
+
 .red-text {
     color: darkred;
     font-weight: bold;
