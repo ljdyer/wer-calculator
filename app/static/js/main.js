@@ -151,8 +151,6 @@ function initAudio() {
         console.log("navigator.mediaDevices.getUserMedia")
         navigator.mediaDevices.getUserMedia({audio: true})
             .then(function (stream) {
-                alert('Success!');
-
                 gotStream(stream)
             })
             .catch(function (err) {
@@ -165,4 +163,3 @@ function initAudio() {
 }
 
 window.addEventListener('load', initAudio);
-
