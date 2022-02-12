@@ -3,7 +3,7 @@ from levenshtein.make_levenshtein_html import (generate_html_summary,
 
 
 # ====================
-def create_matrix(m,n):
+def create_matrix(m, n):
     """Create an m by n matrix"""
 
     return [[0 for _ in range(m)] for _ in range(n)]
@@ -56,9 +56,9 @@ def get_wer_info(words_ref: list, words_hyp: list) -> dict:
 
             # Get distances from cells corresponding to each possible edit
             edit_options = [
-                (matrix [ n_ - 1 ] [ m_ - 1 ], '⭦'),  # substitution
-                (matrix [ n_ - 1 ] [ m_     ], '⭡'),  # deletion
-                (matrix [ n_     ] [ m_ - 1 ], '⭠')   # insertion
+                (matrix[n_-1][m_-1], '⭦'),  # substitution
+                (matrix[n_-1][m_], '⭡'),  # deletion
+                (matrix[n_][m_-1], '⭠')   # insertion
             ]
 
             # Find the minimum of the three distances
@@ -113,7 +113,7 @@ def get_levenshtein_html(reference: str, hypothesis: str) -> dict:
 
     # Generate table showing the a series of steps to get from
     # reference to hypothesis sentence
-    
+
     # Generate the final HTML to display to the user
     html = generate_html_summary(
         reference, hypothesis, words_ref, words_hyp,

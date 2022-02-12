@@ -15,7 +15,7 @@ TEST_CASES = [
     },
     {
         'reference': 'These slides are for a phonetics class.',
-        'hypothesis': 'this is a sentence that has absolutely ' + \
+        'hypothesis': 'this is a sentence that has absolutely ' +
                       'nothing to do with the reference sentence',
         'wer': 200
     },
@@ -46,7 +46,7 @@ def test_get_wer_info():
         wer_info = get_wer_info(words_ref, words_hyp)
         try:
             assert wer_info['wer'] == tc['wer']
-        except:
+        except AssertionError:
             print('!!! WARNING !!!: test_get_wer_info failed for',
                   f'reference: {tc["reference"]};',
                   f'hypothesis: {tc["hypothesis"]}.')

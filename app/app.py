@@ -1,16 +1,17 @@
 from flask import Flask, jsonify, render_template, request
 
-from app_helper import *
+from app_helper import get_best_hypothesis
 from levenshtein.levenshtein import get_levenshtein_html
 from levenshtein.test_levenshtein import test_get_wer_info
 
 # Error messages
 RETRIEVE_REF_ERROR = 'Could not retrieve reference sentence. Please try again.'
 SR_ERROR = 'No speech detected. Please try again.'
-LEVENSHTEIN_ERROR = 'An error occurred while calculating the WER. Please try again.'
-
+LEVENSHTEIN_ERROR = 'An error occurred while calculating the WER. ' + \
+                    'Please try again.'
 
 app = Flask(__name__)
+
 
 # ====================
 @app.route('/')
@@ -35,8 +36,8 @@ def save_audio():
         return "SUCCESS"
     except:
         return "ERR"
-  
-    
+
+
 # ====================
 @app.route('/get_wer', methods=['POST'])
 def get_wer():
@@ -52,14 +53,14 @@ def get_wer():
         hypothesis = get_best_hypothesis('upload/audio.wav')
     except:
         return {'error': SR_ERROR}
-        
+
     # Get WER information to display to user
     try:
         html = get_levenshtein_html(reference, hypothesis)
     except:
         return {'error': LEVENSHTEIN_ERROR}
     return jsonify(html)
-    
+
 
 # ====================
 if __name__ == "__main__":

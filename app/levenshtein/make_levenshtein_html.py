@@ -35,7 +35,7 @@ def add_class(word: str, class_: str) -> str:
 
     return f'<span class="{class_}">' + word + '</span>'
 
-        
+
 # ====================
 def remove_html(str_: str) -> str:
     """Remove all HTML tags from a string"""
@@ -76,7 +76,7 @@ def is_or_are(number: int) -> str:
 # === LISTS AND MATRICES ===
 
 # ====================
-def create_matrix(m,n):
+def create_matrix(m, n):
     """Create an m by n matrix"""
 
     return [[0 for _ in range(m)] for _ in range(n)]
@@ -103,7 +103,7 @@ def generate_html_summary(reference: str, hypothesis: str,
         <p class="hyp-text">"{hypothesis}"</p>
     </div>
     <div class="extra-space">
-        <span class="num">{edits}</span> 
+        <span class="num">{edits}</span>
          {sing_or_plural("edit", edits)} {is_or_are(edits)}
         required to get from the hypothesis sentence to the reference
         sentence ({LEVENSHTEIN_LINK}).
@@ -125,7 +125,7 @@ def generate_html_summary(reference: str, hypothesis: str,
 
 # ====================
 def make_steps_and_sents_table(words_ref: list, words_hyp: list,
-                   backpointer_matrix: list) -> str:
+                               backpointer_matrix: list) -> str:
     """Make an HTML table that shows a series of steps to get from
     a hypothesis to a reference transcription"""
 
@@ -222,14 +222,14 @@ def get_steps_and_sents(words_ref: list, words_hyp: list,
 
 # ====================
 def generate_levenshtein_html(matrix: list, backpointer_matrix: list,
-                             words_ref: list, words_hyp: list):
+                              words_ref: list, words_hyp: list):
     """Generate an HTML string to display a Levenshtein matrix with
     backpointer symbols"""
 
     new_matrix = create_matrix(len(matrix[0]), len(matrix))
     words_ref = [''] + words_ref    # Header row
     words_hyp = ['', ''] + words_hyp    # Header column
-    
+
     # Combine numbers and backpointers
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
@@ -240,7 +240,7 @@ def generate_levenshtein_html(matrix: list, backpointer_matrix: list,
     new_matrix = [words_ref] + new_matrix
     # Append header column
     new_matrix = [[words_hyp[i]] + new_matrix[i]
-               for i in range(len(new_matrix))]
+                  for i in range(len(new_matrix))]
 
     html_lines = ['<table class="levenshtein"']
     for row in new_matrix:
