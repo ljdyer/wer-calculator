@@ -1,5 +1,6 @@
-from levenshtein.make_levenshtein_html \
-    import generate_html_summary, generate_levenshtein_html
+from levenshtein.make_levenshtein_html import (generate_html_summary,
+                                               generate_levenshtein_html)
+
 
 # ====================
 def create_matrix(m,n):

@@ -1,10 +1,8 @@
-# Third-party libraries
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, jsonify, render_template, request
 
-# Project modules
+from app_helper import *
 from levenshtein.levenshtein import get_levenshtein_html
 from levenshtein.test_levenshtein import test_get_wer_info
-from app_helper import *
 
 # Error messages
 RETRIEVE_REF_ERROR = 'Could not retrieve reference sentence. Please try again.'
