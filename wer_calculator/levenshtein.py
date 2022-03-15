@@ -1,12 +1,6 @@
-from levenshtein.make_levenshtein_html import (generate_html_summary,
-                                               generate_levenshtein_html)
-
-
-# ====================
-def create_matrix(m, n):
-    """Create an m by n matrix"""
-
-    return [[0 for _ in range(m)] for _ in range(n)]
+from make_levenshtein_html import (generate_html_summary,
+                                   generate_levenshtein_html)
+from helper.helper import create_matrix
 
 
 # ====================

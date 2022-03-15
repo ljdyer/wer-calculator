@@ -1,22 +1,37 @@
+.container {
+    margin: auto;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box
+}
+
 body {
-    font-size: 100%;
+    font-size: 1.5vh;
     font-family: Verdana, sans-serif;
     background-color: rgb(127, 195, 255);
     text-align: center
 }
 
-select, button, option {
+select {
+    font-family: inherit;
+    font-size: inherit;
+    /* Ellipsis effect below confirmed to work on latest versions
+    of Chrome, Firefox and Edge as of 28 Feb 2022 */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%
+}
+
+button, option {
     font-family: inherit;
     font-size: inherit;
 }
 
-p {
-    max-width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.blue-text{
+.blue-text {
     color: darkblue;
     font-weight: bold;
 }
@@ -26,14 +41,9 @@ p {
     font-weight: bold;
 }
 
-.small-space {
-    padding-top: 8px;
-    padding-bottom: 8px;
-}
-
-.extra-space {
-    padding-top: 15px;
-    padding-bottom: 15px;
+.vpadding-med {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
 }
 
 hr {
@@ -47,15 +57,20 @@ table {
     padding: 10px;
 }
 
+.steps-table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .num {
-    font-size: 1.2em;
+    font-size: 1.5em;
     text-align: center;
 }
 
 .ref-text, .hyp-text {
     font-family: 'Times New Roman', serif;
-    font-size: 1.5em;
-    margin-top: 10px;
+    font-size: 2.5vh;
+    margin-top: 0.4vh;
     margin-bottom: 0px;
 }
 
@@ -107,7 +122,7 @@ table.matrix-key td {
 
 /* Modal Content/Box */
 .modal-content {
-    
+
     background-color: #fefefe;
     position: absolute;
     top: 50%;

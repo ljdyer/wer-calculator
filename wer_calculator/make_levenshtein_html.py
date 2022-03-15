@@ -1,88 +1,8 @@
-import re
+from helper.helper import create_matrix
+from helper.html_helper import add_class, remove_html_from_all
+from helper.grammar_helper import is_or_are, sing_or_plural
+from jinja2 import Environment, PackageLoader
 
-# === Regular expression ====
-
-HTML_TAG = re.compile('<.*?>')
-
-# === UI text ===
-
-HERE_ARE_THE_EDITS = "Here is an example sequence of edits to get " + \
-    "from the hypothesis sentence to the reference sentence:"
-LEVENSHTEIN_LINK = \
-    '<a href="#" onclick="showLevenshtein();return false;">' + \
-    'show Levenshtein matrix</a>'
-
-
-# === HTML FORMATTING (GENERAL) ===
-
-# ====================
-def cell_align(str_: str, alignment: str) -> str:
-    """Put string into an HTML table cell with the specified alignment"""
-
-    return f'<td style="text-align:{alignment}">{str_}</td>'
-
-
-# ====================
-def bold(str_: str) -> str:
-    """Make a string bold"""
-
-    return f'<b>{str_}</b>'
-
-
-# ====================
-def add_class(word: str, class_: str) -> str:
-    """Add an HTML class to a string"""
-
-    return f'<span class="{class_}">' + word + '</span>'
-
-
-# ====================
-def remove_html(str_: str) -> str:
-    """Remove all HTML tags from a string"""
-
-    word = re.sub(HTML_TAG, '', str_)
-    return word
-
-
-# ====================
-def remove_html_from_all(strs: list) -> list:
-    """Remove HTML from all strings in list"""
-
-    return [remove_html(str_) for str_ in strs]
-
-
-# === GRAMMAR ===
-
-# ====================
-def sing_or_plural(word: str, number: int) -> str:
-    """Add a plural s to the word if the number is not 1"""
-
-    if number == 1:
-        return word
-    else:
-        return word + 's'
-
-
-# ====================
-def is_or_are(number: int) -> str:
-    """Return 'is' if the number is 1 or 'are' otherwise"""
-
-    if number == 1:
-        return 'is'
-    else:
-        return 'are'
-
-
-# === LISTS AND MATRICES ===
-
-# ====================
-def create_matrix(m, n):
-    """Create an m by n matrix"""
-
-    return [[0 for _ in range(m)] for _ in range(n)]
-
-
-# === MAIN FUNCTIONS ===
 
 # ====================
 def generate_html_summary(reference: str, hypothesis: str,
@@ -90,59 +10,25 @@ def generate_html_summary(reference: str, hypothesis: str,
                           edits: int, wer: float,
                           backpointer_matrix: list) -> dict:
 
-    steps_table = make_steps_and_sents_table(
-        words_ref, words_hyp, backpointer_matrix)
-
-    html = f"""
-    <div class="extra-space">
-        You said:<br>
-        <p class="ref-text">"{reference}"</p>
-    </div>
-    <div class="extra-space">
-        Google Web Speech API heard:<br>
-        <p class="hyp-text">"{hypothesis}"</p>
-    </div>
-    <div class="extra-space">
-        <span class="num">{edits}</span>
-         {sing_or_plural("edit", edits)} {is_or_are(edits)}
-        required to get from the hypothesis sentence to the reference
-        sentence ({LEVENSHTEIN_LINK}).
-    </div>
-    <div class="extra-space">
-        The word error rate (WER) is <span class="num">{wer}%</span>.
-    </div>
-    """
-    if edits:
-        html = html + f"""
-        <div class="extra-space">
-            {HERE_ARE_THE_EDITS}<br><br>
-            {steps_table}
-        </div>
-        """
-
-    return html
-
-
-# ====================
-def make_steps_and_sents_table(words_ref: list, words_hyp: list,
-                               backpointer_matrix: list) -> str:
-    """Make an HTML table that shows a series of steps to get from
-    a hypothesis to a reference transcription"""
-
     steps_and_sents = get_steps_and_sents(
         words_ref, words_hyp, backpointer_matrix)
 
-    html_lines = ["<table>"]
-    for step, sent in steps_and_sents:
-        html_lines.append(
-            f'<tr>{cell_align(bold(step), "right")}<td></td></tr>')
-        html_lines.append(
-            f'<tr><td></td>{cell_align(sent, "left")}</tr>')
-    html_lines.append("</table>")
+    env = Environment(
+        loader=PackageLoader("make_levenshtein_html"),
+    )
+    template = env.get_template('wer_info.html')
 
-    steps_table = '\n'.join(html_lines)
+    html = template.render(
+        ref_text=reference,
+        hyp_text=hypothesis,
+        num_edits=edits,
+        edit_or_edits=sing_or_plural("edit", edits),
+        is_or_are=is_or_are(edits),
+        wer=wer,
+        steps_and_sents=steps_and_sents
+    )
 
-    return steps_table
+    return html
 
 
 # ====================
@@ -234,20 +120,23 @@ def generate_levenshtein_html(matrix: list, backpointer_matrix: list,
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
             if backpointer_matrix[i][j]:
-                new_matrix[i][j] = str(matrix[i][j]) + ' ' + \
-                            str(backpointer_matrix[i][j])
+                new_matrix[i][j] = ' '.join([
+                    str(matrix[i][j]),
+                    str(backpointer_matrix[i][j])
+                ])
     # Append header row
     new_matrix = [words_ref] + new_matrix
     # Append header column
     new_matrix = [[words_hyp[i]] + new_matrix[i]
                   for i in range(len(new_matrix))]
 
-    html_lines = ['<table class="levenshtein"']
-    for row in new_matrix:
-        html_lines.append("<tr>")
-        for cell in row:
-            html_lines.append(f'<td>{cell}</td>')
-        html_lines.append("</tr>")
-    html_lines.append("</table>")
+    env = Environment(
+        loader=PackageLoader("make_levenshtein_html"),
+    )
+    template = env.get_template('levenshtein_matrix.html')
 
-    return '\n'.join(html_lines)
+    html = template.render(
+        new_matrix=new_matrix
+    )
+
+    return html

@@ -1,0 +1,31 @@
+<div class="vpadding-med">
+    You said:
+    <p class="ref-text">"{{ref_text}}"</p>
+</div>
+<div class="vpadding-med">
+    Google Web Speech API heard:
+    <p class="hyp-text">"{{hyp_text}}"</p>
+</div>
+<div class="vpadding-med">
+    <span class="num">{{num_edits}}</span> {{edit_or_edits}} {{is_or_are}} required to get from the hypothesis sentence to the reference sentence (<a href="#" onclick="showLevenshtein();">show Levenshtein matrix</a>).
+</div>
+<div class="vpadding-med">
+    The word error rate (WER) is <span class="num">{{wer}}%</span>.
+</div>
+{% if num_edits %}
+<div class="vpadding-med">
+    Here is an example sequence of edits to get from the hypothesis sentence to the reference sentence:
+    <table class="steps-table">
+    {% for step, sent in steps_and_sents %}
+        <tr>
+            <td style="text-align:right"><b>{{step}}</b></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align:left">{{sent}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endif %}

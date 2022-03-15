@@ -1,0 +1,9 @@
+<table class="levenshtein">
+    {% for row in new_matrix %}
+    <tr>
+        {% for cell in row %}
+        <td>{{cell}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>

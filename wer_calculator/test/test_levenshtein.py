@@ -1,4 +1,4 @@
-from levenshtein.levenshtein import clean_sentence, get_wer_info
+from levenshtein import clean_sentence, get_wer_info
 
 # Expected values obtained from https://www.amberscript.com/en/wer-tool/
 
@@ -61,7 +61,7 @@ def test_get_wer_info():
         print('!!! WARNING !!!: test_get_wer_info did not raise an',
               'exception when hypothesis=""')
         quit()
-    except:
+    except ZeroDivisionError:
         pass
 
     # If we made it to the end without quitting, all tests were passed

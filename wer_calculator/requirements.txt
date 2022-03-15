@@ -1,4 +1,4 @@
 gunicorn
 flask
 SpeechRecognition
-numpy
+Jinja2

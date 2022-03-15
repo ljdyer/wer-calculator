@@ -49,12 +49,12 @@ function displayWerInfo(werOutput, levenshteinMatrix){
 
 function displayError(error){
     document.getElementById('wer-output').classList.add("red-text");
-    document.getElementById('wer-output').innerHTML = `<div class="extra-space">${error}</div>`;
+    document.getElementById('wer-output').innerHTML = `<div class="vpadding-med">${error}</div>`;
 }
 
 function displayText(message){
     document.getElementById('wer-output').classList.remove("red-text");
-    document.getElementById('wer-output').innerHTML = `<div class="extra-space">${message}</div>`;
+    document.getElementById('wer-output').innerHTML = `<div class="vpadding-med">${message}</div>`;
 }
 
 function stopRecording() {
